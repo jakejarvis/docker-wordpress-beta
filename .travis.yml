@@ -2,19 +2,40 @@ language: shell
 services: docker
 
 env:
-  - VARIANT=apache
-  - VARIANT=fpm
-  - VARIANT=fpm-alpine
+  global:
+    - VERSION_MAJOR=5.4
+    - VERSION_BETA=beta3
+    - BASE="${DOCKER_USERNAME}/wordpress-beta"
+  matrix:
+    - VARIANT=apache
+    - VARIANT=fpm
+    - VARIANT=fpm-alpine
 
 before_script:
   - env | sort
   - cd "$VARIANT"
-  - BASE="jakejarvis/wordpress-beta"
-  - IMAGE="${BASE}:${VARIANT}"
 
 script:
-  - docker build -t "$IMAGE" .
+  - docker build -t "${BASE}:${VARIANT}" .
+  - docker tag "${BASE}:${VARIANT}" "${BASE}:${VERSION_MAJOR}-${VARIANT}"
+  - docker tag "${BASE}:${VARIANT}" "${BASE}:${VERSION_MAJOR}-${VERSION_BETA}-${VARIANT}"
+  - if [ "$VARIANT" == "apache" ]; then
+      docker tag "${BASE}:${VARIANT}" "${BASE}:latest";
+      docker tag "${BASE}:${VARIANT}" "${BASE}:${VERSION_MAJOR}";
+      docker tag "${BASE}:${VARIANT}" "${BASE}:${VERSION_MAJOR}-${VERSION_BETA}";
+    fi
   - docker images
+
+after_success:
+  - echo "${DOCKER_TOKEN}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+  - docker push ${BASE}:${VARIANT}
+  - docker push ${BASE}:${VERSION_MAJOR}-${VARIANT}
+  - docker push ${BASE}:${VERSION_MAJOR}-${VERSION_BETA}-${VARIANT}
+  - if [ "$VARIANT" == "apache" ]; then
+      docker push ${BASE}:latest;
+      docker push ${BASE}:${VERSION_MAJOR};
+      docker push ${BASE}:${VERSION_MAJOR}-${VERSION_BETA};
+    fi
 
 notifications:
   email: false
