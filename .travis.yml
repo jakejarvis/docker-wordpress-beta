@@ -1,26 +1,20 @@
-language: bash
+language: shell
 services: docker
 
 env:
-  - VARIANT=php7.2/apache
-  - VARIANT=php7.2/fpm
-  - VARIANT=php7.2/fpm-alpine
-  - VARIANT=php7.3/apache
-  - VARIANT=php7.3/fpm
-  - VARIANT=php7.3/fpm-alpine
-  - VARIANT=php7.4/apache
-  - VARIANT=php7.4/fpm
-  - VARIANT=php7.4/fpm-alpine
+  - VARIANT=apache
+  - VARIANT=fpm
+  - VARIANT=fpm-alpine
 
 before_script:
   - env | sort
   - cd "$VARIANT"
-  - slash='/'; image="wordpress-beta:${VARIANT//$slash/-}"
+  - BASE="jakejarvis/wordpress-beta"
+  - IMAGE="${BASE}:${VARIANT}"
 
 script:
-  - docker build -t "$image" .
-
-after_script:
+  - docker build -t "$IMAGE" .
   - docker images
 
-# vim:set et ts=2 sw=2:
+notifications:
+  email: false

@@ -5,10 +5,10 @@ set -euo pipefail
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
+phpVersion=7.4
+
 current=$1
 sha1="$(curl -fsSL "https://wordpress.org/wordpress-$current.tar.gz.sha1")"
-
-phpVersions=( php*.* )
 
 declare -A variantExtras=(
 	[apache]="$(< apache-extras.template)"
@@ -29,51 +29,32 @@ sed_escape_rhs() {
 }
 
 travisEnv=
-for phpVersion in "${phpVersions[@]}"; do
-	phpVersionDir="$phpVersion"
-	phpVersion="${phpVersion#php}"
 
-	for variant in apache fpm fpm-alpine; do
-		dir="$phpVersionDir/$variant"
-		mkdir -p "$dir"
+for variant in apache fpm fpm-alpine; do
+	dir="$variant"
+	mkdir -p "$dir"
 
-		extras="${variantExtras[$variant]:-}"
-		if [ -n "$extras" ]; then
-			extras=$'\n'"$extras"$'\n'
-		fi
-		cmd="${variantCmds[$variant]}"
-		base="${variantBases[$variant]}"
+	extras="${variantExtras[$variant]:-}"
+	if [ -n "$extras" ]; then
+		extras=$'\n'"$extras"$'\n'
+	fi
+	cmd="${variantCmds[$variant]}"
+	base="${variantBases[$variant]}"
 
-		entrypoint='docker-entrypoint.sh'
+	entrypoint='docker-entrypoint.sh'
 
-		sed -r \
-			-e 's!%%WORDPRESS_VERSION%%!'"$current"'!g' \
-			-e 's!%%WORDPRESS_SHA1%%!'"$sha1"'!g' \
-			-e 's!%%PHP_VERSION%%!'"$phpVersion"'!g' \
-			-e 's!%%VARIANT%%!'"$variant"'!g' \
-			-e 's!%%VARIANT_EXTRAS%%!'"$(sed_escape_rhs "$extras")"'!g' \
-			-e 's!%%CMD%%!'"$cmd"'!g' \
-			"Dockerfile-${base}.template" > "$dir/Dockerfile"
+	sed -r \
+		-e 's!%%WORDPRESS_VERSION%%!'"$current"'!g' \
+		-e 's!%%WORDPRESS_SHA1%%!'"$sha1"'!g' \
+		-e 's!%%PHP_VERSION%%!'"$phpVersion"'!g' \
+		-e 's!%%VARIANT%%!'"$variant"'!g' \
+		-e 's!%%VARIANT_EXTRAS%%!'"$(sed_escape_rhs "$extras")"'!g' \
+		-e 's!%%CMD%%!'"$cmd"'!g' \
+		"Dockerfile-${base}.template" > "$dir/Dockerfile"
 
-		case "$phpVersion" in
-			7.2 )
-				sed -ri \
-					-e '/libzip-dev/d' \
-					"$dir/Dockerfile"
-				;;
-		esac
-		case "$phpVersion" in
-			7.2 | 7.3 )
-				sed -ri \
-					-e 's!gd --with-freetype --with-jpeg!gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr!g' \
-					"$dir/Dockerfile"
-				;;
-		esac
+	cp -a "$entrypoint" "$dir/docker-entrypoint.sh"
 
-		cp -a "$entrypoint" "$dir/docker-entrypoint.sh"
-
-		travisEnv+='\n  - VARIANT='"$dir"
-	done
+	travisEnv+='\n  - VARIANT='"$dir"
 done
 
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
