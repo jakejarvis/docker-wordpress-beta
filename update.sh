@@ -1,16 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+# Usage: ./update.sh 5.4-beta3
+
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
-phpVersions=( "$@" )
-if [ ${#phpVersions[@]} -eq 0 ]; then
-	phpVersions=( php*.*/ )
-fi
-phpVersions=( "${phpVersions[@]%/}" )
-
-current="$(curl -fsSL 'https://api.wordpress.org/core/version-check/1.7/' | jq -r '.offers[0].current')"
+current=$1
 sha1="$(curl -fsSL "https://wordpress.org/wordpress-$current.tar.gz.sha1")"
+
+phpVersions=( php*.* )
 
 cliPossibleVersions=( $(
 	git ls-remote --tags 'https://github.com/wp-cli/wp-cli.git' \
