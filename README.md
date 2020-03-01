@@ -1,26 +1,25 @@
-# https://github.com/docker-library/wordpress
+# [WordPress Beta](https://make.wordpress.org/core/handbook/testing/beta-testing/) via Docker
 
-## Maintained by: [the Docker Community](https://github.com/docker-library/wordpress)
+[![Travis CI](https://img.shields.io/travis/com/jakejarvis/wordpress-beta-docker?label=Travis%20CI&logo=travis)](https://travis-ci.com/jakejarvis/wordpress-beta-docker) [![Docker Pulls](https://img.shields.io/docker/pulls/jakejarvis/wordpress-beta?label=Docker%20Hub&logo=docker)](https://hub.docker.com/r/jakejarvis/wordpress-beta)
 
-This is the Git repo of the [Docker "Official Image"](https://github.com/docker-library/official-images#what-are-official-images) for [`wordpress`](https://hub.docker.com/_/wordpress/) (not to be confused with any official `wordpress` image provided by `wordpress` upstream). See [the Docker Hub page](https://hub.docker.com/_/wordpress/) for the full readme on how to use this Docker image and for information regarding contributing and issues.
+## Supported tags and respective `Dockerfile` links
 
-The [full image description on Docker Hub](https://hub.docker.com/_/wordpress/) is generated/maintained over in [the docker-library/docs repository](https://github.com/docker-library/docs), specifically in [the `wordpress` directory](https://github.com/docker-library/docs/tree/master/wordpress).
+- [`5.4-beta3-apache`, `5.4-apache`, `apache`, `5.4-beta3`, `5.4`, `latest`](https://github.com/jakejarvis/docker-wordpress-beta/blob/451a70586a62f5762af7cbe9cd0a04002c7ef32a/apache/Dockerfile)
+- [`5.4-beta3-fpm`, `5.4-fpm`, `fpm`](https://github.com/jakejarvis/docker-wordpress-beta/blob/451a70586a62f5762af7cbe9cd0a04002c7ef32a/fpm/Dockerfile)
+- [`5.4-beta3-fpm-alpine`, `5.4-fpm-alpine`, `fpm-alpine`](https://github.com/jakejarvis/docker-wordpress-beta/blob/451a70586a62f5762af7cbe9cd0a04002c7ef32a/fpm-alpine/Dockerfile)
 
-## See a change merged here that doesn't show up on Docker Hub yet?
+## Usage
 
-For more information about the full official images change lifecycle, see [the "An image's source changed in Git, now what?" FAQ entry](https://github.com/docker-library/faq#an-images-source-changed-in-git-now-what).
+```bash
+$ docker run -p 8080:80 -d jakejarvis/wordpress-beta:latest
+```
 
-For outstanding `wordpress` image PRs, check [PRs with the "library/wordpress" label on the official-images repository](https://github.com/docker-library/official-images/labels/library%2Fwordpress). For the current "source of truth" for [`wordpress`](https://hub.docker.com/_/wordpress/), see [the `library/wordpress` file in the official-images repository](https://github.com/docker-library/official-images/blob/master/library/wordpress).
+For more, refer to the [official WordPress image](https://hub.docker.com/_/wordpress/) which this repository was forked from.
 
----
+## License
 
--	[![build status badge](https://img.shields.io/travis/docker-library/wordpress/master.svg?label=Travis%20CI)](https://travis-ci.org/docker-library/wordpress/branches)
--	[![build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/update.sh/job/wordpress.svg?label=Automated%20update.sh)](https://doi-janky.infosiftr.net/job/update.sh/job/wordpress)
+View [license information](https://wordpress.org/about/license/) for the software contained in this image.
 
-| Build | Status | Badges | (per-arch) |
-|:-:|:-:|:-:|:-:|
-| [![amd64 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/amd64/job/wordpress.svg?label=amd64)](https://doi-janky.infosiftr.net/job/multiarch/job/amd64/job/wordpress) | [![arm32v5 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/arm32v5/job/wordpress.svg?label=arm32v5)](https://doi-janky.infosiftr.net/job/multiarch/job/arm32v5/job/wordpress) | [![arm32v6 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/arm32v6/job/wordpress.svg?label=arm32v6)](https://doi-janky.infosiftr.net/job/multiarch/job/arm32v6/job/wordpress) | [![arm32v7 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/arm32v7/job/wordpress.svg?label=arm32v7)](https://doi-janky.infosiftr.net/job/multiarch/job/arm32v7/job/wordpress) |
-| [![arm64v8 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/arm64v8/job/wordpress.svg?label=arm64v8)](https://doi-janky.infosiftr.net/job/multiarch/job/arm64v8/job/wordpress) | [![i386 build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/i386/job/wordpress.svg?label=i386)](https://doi-janky.infosiftr.net/job/multiarch/job/i386/job/wordpress) | [![ppc64le build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/ppc64le/job/wordpress.svg?label=ppc64le)](https://doi-janky.infosiftr.net/job/multiarch/job/ppc64le/job/wordpress) | [![s390x build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/multiarch/job/s390x/job/wordpress.svg?label=s390x)](https://doi-janky.infosiftr.net/job/multiarch/job/s390x/job/wordpress) |
-| [![put-shared build status badge](https://img.shields.io/jenkins/s/https/doi-janky.infosiftr.net/job/put-shared/job/light/job/wordpress.svg?label=put-shared)](https://doi-janky.infosiftr.net/job/put-shared/job/light/job/wordpress) |
+As with all Docker images, these likely also contain other software which may be under other licenses (such as Bash, etc from the base distribution, along with any direct or indirect dependencies of the primary software being contained).
 
-<!-- THIS FILE IS GENERATED BY https://github.com/docker-library/docs/blob/master/generate-repo-stub-readme.sh -->
+As for any pre-built image usage, it is the image user's responsibility to ensure that any use of this image complies with any relevant licenses for all software contained within.
