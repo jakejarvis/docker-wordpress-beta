@@ -5,10 +5,10 @@ set -euo pipefail
 
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
-phpVersion=7.4
-
 current=$1
 sha1="$(curl -fsSL "https://wordpress.org/wordpress-$current.tar.gz.sha1")"
+
+phpVersion=7.4
 
 declare -A variantExtras=(
 	[apache]="$(< apache-extras.template)"
@@ -27,8 +27,6 @@ declare -A variantBases=(
 sed_escape_rhs() {
 	sed -e 's/[\/&]/\\&/g; $!a\'$'\n''\\n' <<<"$*" | tr -d '\n'
 }
-
-travisEnv=
 
 for variant in apache fpm fpm-alpine; do
 	dir="$variant"
@@ -53,9 +51,4 @@ for variant in apache fpm fpm-alpine; do
 		"Dockerfile-${base}.template" > "$dir/Dockerfile"
 
 	cp -a "$entrypoint" "$dir/docker-entrypoint.sh"
-
-	travisEnv+='\n    - VARIANT='"$dir"
 done
-
-travis="$(awk -v 'RS=\n\n' '$1 == "  matrix:" { $0 = "  matrix:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
-echo "$travis" > .travis.yml

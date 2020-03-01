@@ -1,6 +1,6 @@
 # [WordPress Beta](https://make.wordpress.org/core/handbook/testing/beta-testing/) via Docker
 
-[![Travis CI](https://img.shields.io/travis/com/jakejarvis/wordpress-beta-docker?label=Travis%20CI&logo=travis)](https://travis-ci.com/jakejarvis/wordpress-beta-docker) [![Docker Pulls](https://img.shields.io/docker/pulls/jakejarvis/wordpress-beta?label=Docker%20Hub&logo=docker)](https://hub.docker.com/r/jakejarvis/wordpress-beta)
+[![Travis CI](https://img.shields.io/travis/com/jakejarvis/docker-wordpress-beta?label=Travis%20CI&logo=travis)](https://travis-ci.com/jakejarvis/docker-wordpress-beta) [![Docker Pulls](https://img.shields.io/docker/pulls/jakejarvis/wordpress-beta?label=Docker%20Hub&logo=docker)](https://hub.docker.com/r/jakejarvis/wordpress-beta)
 
 ## Supported tags and respective `Dockerfile` links
 
@@ -14,7 +14,11 @@
 $ docker run -p 8080:80 -d jakejarvis/wordpress-beta:latest
 ```
 
-For more, refer to the [official WordPress image](https://hub.docker.com/_/wordpress/) which this repository was forked from.
+For a full plug-and-play setup, you can also reference an [example `docker-compose.yml` file](docker-compose.yml) I've provided, which includes this WordPress Beta container, [MariaDB](https://hub.docker.com/_/mariadb), [phpMyAdmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin/), and [WP-CLI](https://wp-cli.org/). Just run `docker-compose up` in this directory and visit [http://localhost:8080/](http://localhost:8080/) to see the magic happen!
+
+You can also refer to the [official WordPress image](https://hub.docker.com/_/wordpress/), which this repository was forked from, for even more options — everything there is cross-compatible.
+
+The [WordPress Beta Tester](https://wordpress.org/plugins/wordpress-beta-tester/) plugin can be added after setup to join the nightly (alpha) or trunk (literally the [latest commits](https://core.trac.wordpress.org/browser/trunk)) release channels (at your own risk 😬).
 
 ## License
 
